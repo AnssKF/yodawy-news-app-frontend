@@ -5,10 +5,10 @@ import { AuthLoginCardComponent } from './components/AuthLoginCard';
 import { AuthRegisterCardComponent } from './components/AuthRegisterCard';
 import { RouterModule } from '../../core/components/Router/RouterModule';
 import { FOFPageContainer } from '../FOFPage/FOFContainer';
+import { Row, Col } from 'react-bootstrap';
 
 type TAuthPageContainerProps = {
 }
-
 
 export const AuthPageContainer: FunctionComponent<TAuthPageContainerProps> = () => {
 
@@ -37,6 +37,12 @@ export const AuthPageContainer: FunctionComponent<TAuthPageContainerProps> = () 
     ]
 
     return (
-        <RouterModule routes={ROUTES} />
+        <div className="d-flex flex-column justify-content-center h-100 w-100">
+            <Row className="justify-content-center">
+                <Col xs={10} md={8} lg={6} xl={4}> 
+                    <RouterModule routes={ROUTES} />
+                </Col>
+            </Row>
+        </div>
     )
 }

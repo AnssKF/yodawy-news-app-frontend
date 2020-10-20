@@ -9,6 +9,7 @@ import { RouterModule } from './core/components/Router/RouterModule';
 import { NewsPageContainer } from './pages/NewsPage/NewsPageContainer';
 import { AuthPageContainer } from './pages/AuthPage/AuthPageContainer';
 import { FOFPageContainer } from './pages/FOFPage/FOFContainer';
+import { LayoutComponent } from './core/components/Layout/LayoutComponent';
 
 const ROUTES: RouteProps[] = [
   {
@@ -28,7 +29,9 @@ const ROUTES: RouteProps[] = [
 
 function App() {
   return (
-    <RouterModule routes={ROUTES} />
+    <LayoutComponent>
+      <RouterModule routes={ROUTES} />
+    </LayoutComponent>
   );
 }
 
