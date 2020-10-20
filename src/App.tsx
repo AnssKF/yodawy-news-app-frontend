@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+
+// Generics
+import { RouteProps } from 'react-router-dom';
+import { RouterModule } from './core/components/Router/RouterModule';
+
+// Components
+import { NewsPageContainer } from './pages/NewsPage/NewsPageContainer';
+import { AuthPageContainer } from './pages/AuthPage/AuthPageContainer';
+import { FOFPageContainer } from './pages/FOFPage/FOFContainer';
+
+const ROUTES: RouteProps[] = [
+  {
+    path: '/',
+    component: NewsPageContainer,
+    exact: true
+  },
+  {
+    path: '/auth',
+    component: AuthPageContainer
+  },
+  {
+    path: '',
+    component: FOFPageContainer
+  }
+]
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RouterModule routes={ROUTES} />
   );
 }
 
