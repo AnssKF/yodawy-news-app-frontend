@@ -2,18 +2,23 @@ import React from 'react';
 import './App.scss';
 
 // Generics
-import { RouteProps } from 'react-router-dom';
+import { RouteProps, Redirect } from 'react-router-dom';
 import { RouterModule } from './core/components/Router/RouterModule';
 
 // Components
 import { NewsPageContainer } from './pages/NewsPage/NewsPageContainer';
 import { AuthPageContainer } from './pages/AuthPage/AuthPageContainer';
 import { FOFPageContainer } from './pages/FOFPage/FOFContainer';
-import { LayoutComponent } from './core/components/Layout/LayoutComponent';
+import { AuthContextProvider } from './core/services/auth/store';
 
 const ROUTES: RouteProps[] = [
   {
     path: '/',
+    render: () => (<Redirect to={`/headlines`} />),
+    exact: true
+  },
+  {
+    path: '/headlines',
     component: NewsPageContainer,
     exact: true
   },
@@ -29,9 +34,9 @@ const ROUTES: RouteProps[] = [
 
 function App() {
   return (
-    <LayoutComponent>
-      <RouterModule routes={ROUTES} />
-    </LayoutComponent>
+    <AuthContextProvider>
+        <RouterModule routes={ROUTES} />
+    </AuthContextProvider>
   );
 }
 

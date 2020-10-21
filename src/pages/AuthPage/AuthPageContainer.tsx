@@ -6,6 +6,7 @@ import { AuthRegisterCardComponent } from './components/AuthRegisterCard';
 import { RouterModule } from '../../core/components/Router/RouterModule';
 import { FOFPageContainer } from '../FOFPage/FOFContainer';
 import { Row, Col } from 'react-bootstrap';
+import { LayoutComponent } from '../../core/components/Layout/LayoutComponent';
 
 type TAuthPageContainerProps = {
 }
@@ -37,12 +38,14 @@ export const AuthPageContainer: FunctionComponent<TAuthPageContainerProps> = () 
     ]
 
     return (
-        <div className="d-flex flex-column justify-content-center h-100 w-100">
-            <Row className="justify-content-center">
-                <Col xs={10} md={8} lg={6} xl={3}> 
-                    <RouterModule routes={ROUTES} />
-                </Col>
-            </Row>
-        </div>
+        <LayoutComponent>
+            <div className="d-flex flex-column justify-content-center h-100 w-100">
+                <Row className="justify-content-center">
+                    <Col xs={10} md={8} lg={6} xl={3}> 
+                        <RouterModule routes={ROUTES} />
+                    </Col>
+                </Row>
+            </div>
+        </LayoutComponent>
     )
 }

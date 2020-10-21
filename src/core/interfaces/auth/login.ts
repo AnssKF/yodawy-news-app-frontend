@@ -6,7 +6,7 @@ export interface IAuthLoginReqPayload {
 }
 
 export interface IAuthLoginResPayload {
-    user: IUser,
+    user: IUser | null,
     access_token: string
 }
 

@@ -6,6 +6,8 @@ import { IAuthLoginForm, IAuthLoginReqPayload } from '../../../core/interfaces/a
 import { K_EMAIL_REGEX, K_PASSWORD_REGEX } from '../../../core/constants/regex';
 
 import { PerformLogin } from '../../../core/services/auth'
+import { useAuth } from '../../../core/services/auth/store';
+import { useHistory } from 'react-router-dom';
 
 type TAuthLoginCardComponentProps = {
 }
@@ -23,6 +25,8 @@ const LOGINFORM_INITIALSTATE: IAuthLoginForm = {
 
 export const AuthLoginCardComponent: FunctionComponent<TAuthLoginCardComponentProps> = () => {
 
+    const routeHistory = useHistory();
+    const [authState, setAuthState] = useAuth()
     const [loginForm, setLoginForm] = useState<IAuthLoginForm>(LOGINFORM_INITIALSTATE)
 
     const validate = (field: 'email' | 'password', value: string) => {
@@ -51,6 +55,7 @@ export const AuthLoginCardComponent: FunctionComponent<TAuthLoginCardComponentPr
     const isValid = () => {
         return loginForm.email.value && !loginForm.email.msg && loginForm.password.value && !loginForm.password.msg
     }
+    const navigate = (route: string) => routeHistory.push(route)
 
     const onSubmit = async () => {
         const payload: IAuthLoginReqPayload = {
@@ -58,10 +63,26 @@ export const AuthLoginCardComponent: FunctionComponent<TAuthLoginCardComponentPr
             password: loginForm.password.value
         }
 
-        const res = await PerformLogin(payload)
-        console.log(res);
-        setLoginForm(LOGINFORM_INITIALSTATE);
+        try {
+            const res = await PerformLogin(payload)
+            setAuthState(res)
+            setLoginForm({
+                email: {
+                    value: '',
+                    msg: '',
+                },
+                password: {
+                    value: '',
+                    msg: ''
+                }
+            });
+            navigate('/headlines')
+        }catch(e){
+            console.log('LOGIN FORM E');
+            console.log(e);
+        }
     }
+
 
     return (
         <Card className="c__card shadow p-3 rounded-0 border-0">
@@ -98,6 +119,11 @@ export const AuthLoginCardComponent: FunctionComponent<TAuthLoginCardComponentPr
                         block
                         disabled={!isValid()}
                         onClick={onSubmit}>Login</Button>
+
+                    <Button 
+                        variant="link"
+                        block
+                        onClick={()=> navigate('/auth/signup') }>Or Signup</Button>
                 </div>
             </div>
 

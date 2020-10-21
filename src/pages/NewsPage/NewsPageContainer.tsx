@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { Container, Row, Col, Dropdown } from 'react-bootstrap';
 import { IHeadLine } from '../../core/interfaces/headline';
 import { HeadLineCard } from './components/HeadlineCard/HeadlineCard';
+import { LayoutComponent } from '../../core/components/Layout/LayoutComponent';
 
 type TNewsPageContainerProps = {
 }
@@ -55,77 +56,79 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
     ]
 
     return (
-        <Container className="pt-5">
-            <Row className="justify-content-center mb-3">
-                <Col>
+        <LayoutComponent>
+            <Container className="pt-5">
+                <Row className="justify-content-center mb-3">
+                    <Col>
 
-                    <Dropdown className="d-inline mr-2">
-                        <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                            {category.charAt(0).toUpperCase() + category.slice(1)}
-                        </Dropdown.Toggle>
+                        <Dropdown className="d-inline mr-2">
+                            <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                                {category.charAt(0).toUpperCase() + category.slice(1)}
+                            </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                            {
-                                categories.map( category => (
-                                    <Dropdown.Item onClick={ ($e) => setCategory(category)}>{category.charAt(0).toUpperCase() + category.slice(1)}</Dropdown.Item>
-                                ))
-                            }
-                        </Dropdown.Menu>
-                    </Dropdown>
+                            <Dropdown.Menu>
+                                {
+                                    categories.map( category => (
+                                        <Dropdown.Item onClick={ ($e) => setCategory(category)}>{category.charAt(0).toUpperCase() + category.slice(1)}</Dropdown.Item>
+                                    ))
+                                }
+                            </Dropdown.Menu>
+                        </Dropdown>
 
-                    <Dropdown className="d-inline mr-2">
-                        <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                            {country}
-                        </Dropdown.Toggle>
+                        <Dropdown className="d-inline mr-2">
+                            <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                                {country}
+                            </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                            {
-                                countries.map( country => (
-                                    <Dropdown.Item onClick={ ($e) => setCountry(country)}>{country}</Dropdown.Item>
-                                ))
-                            }
-                        </Dropdown.Menu>
-                    </Dropdown>
+                            <Dropdown.Menu>
+                                {
+                                    countries.map( country => (
+                                        <Dropdown.Item onClick={ ($e) => setCountry(country)}>{country}</Dropdown.Item>
+                                    ))
+                                }
+                            </Dropdown.Menu>
+                        </Dropdown>
 
 
-                </Col>
-            </Row>
-            <Row>
+                    </Col>
+                </Row>
+                <Row>
 
-                <Col xs={10} md={6}>
-                    {
-                        news.map((_, i) => {
-                            let node;
-                            if (i % 2) {
+                    <Col xs={10} md={6}>
+                        {
+                            news.map((_, i) => {
+                                let node;
+                                if (i % 2) {
 
-                                node = (
-                                    <div className="pb-3">
-                                        <HeadLineCard headline={_} />
-                                    </div>
-                                )
-                            }
-                            return node;
-                        })
-                    }
-                </Col>
+                                    node = (
+                                        <div className="pb-3">
+                                            <HeadLineCard headline={_} />
+                                        </div>
+                                    )
+                                }
+                                return node;
+                            })
+                        }
+                    </Col>
 
-                <Col xs={10} md={6}>
-                    {
-                        news.map((_, i) => {
-                            let node;
-                            if (!(i % 2)) {
+                    <Col xs={10} md={6}>
+                        {
+                            news.map((_, i) => {
+                                let node;
+                                if (!(i % 2)) {
 
-                                node = (
-                                    <div className="pb-3">
-                                        <HeadLineCard headline={_} />
-                                    </div>
-                                )
-                            }
-                            return node;
-                        })
-                    }
-                </Col>
-            </Row>
-        </Container>
+                                    node = (
+                                        <div className="pb-3">
+                                            <HeadLineCard headline={_} />
+                                        </div>
+                                    )
+                                }
+                                return node;
+                            })
+                        }
+                    </Col>
+                </Row>
+            </Container>
+        </LayoutComponent>
     )
 }

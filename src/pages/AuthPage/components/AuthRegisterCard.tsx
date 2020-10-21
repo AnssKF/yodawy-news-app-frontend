@@ -5,6 +5,8 @@ import { FormInput } from '../../../core/components/FormInput/FormInput';
 import { IAuthSignupForm, IAuthSignupReqPayload } from '../../../core/interfaces/auth/signup';
 import { K_EMAIL_REGEX, K_PASSWORD_REGEX, K_NAME_REGEX } from '../../../core/constants/regex';
 import { PerformSignup } from '../../../core/services/auth';
+import { useHistory } from 'react-router-dom';
+import { useAuth } from '../../../core/services/auth/store';
 
 type TAuthRegisterCardComponentProps = {
 }
@@ -30,6 +32,8 @@ const SIGNUPFORM_INITIALSTATE: IAuthSignupForm = {
 
 export const AuthRegisterCardComponent: FunctionComponent<TAuthRegisterCardComponentProps> = () => {
 
+    const routeHistory = useHistory();
+    const [authState, setAuthState] = useAuth()
     const [signupForm, setSignupForm] = useState<IAuthSignupForm>(SIGNUPFORM_INITIALSTATE)
 
     const validate = (field: 'name' | 'email' | 'password' | 'password_confirmation', value: string) => {
@@ -68,6 +72,8 @@ export const AuthRegisterCardComponent: FunctionComponent<TAuthRegisterCardCompo
             signupForm.password_confirmation.value && !signupForm.password_confirmation.msg;
     }
 
+    const navigate = (route: string) => routeHistory.push(route)
+
     const onSubmit = async () => {
         const payload: IAuthSignupReqPayload = {
             name: signupForm.name.value,
@@ -76,9 +82,32 @@ export const AuthRegisterCardComponent: FunctionComponent<TAuthRegisterCardCompo
             password_confirmation: signupForm.password_confirmation.value,
         }
 
-        const res = await PerformSignup(payload)
-        console.log(res);
-        setSignupForm(SIGNUPFORM_INITIALSTATE);
+        try {
+            const res = await PerformSignup(payload)
+            setAuthState(res)
+            setSignupForm({
+                name: {
+                    value: '',
+                    msg: '',
+                },
+                email: {
+                    value: '',
+                    msg: '',
+                },
+                password: {
+                    value: '',
+                    msg: ''
+                },
+                password_confirmation: {
+                    value: '',
+                    msg: ''
+                }
+            });
+            navigate('/headlines')
+        }catch(e) {
+            console.log('LOGIN FORM E');
+            console.log(e);
+        }
     }
 
     return (
@@ -138,6 +167,11 @@ export const AuthRegisterCardComponent: FunctionComponent<TAuthRegisterCardCompo
                         block
                         disabled={!isValid()}
                         onClick={onSubmit}>Submit</Button>
+
+                    <Button 
+                        variant="link"
+                        block
+                        onClick={()=> navigate('/auth/login') }>Or Login</Button>
                 </div>
             </div>
 
