@@ -1,8 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { Card, Button } from 'react-bootstrap'
 
-import { FormInput } from '../../../core/components/FormInput/FormInput'
-import './AuthPage.scss'
+import { FormInput } from '../../../core/components/FormInput/FormInput';
 
 type TAuthLoginCardComponentProps = {
 }

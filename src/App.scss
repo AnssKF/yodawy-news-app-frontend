@@ -1,5 +1,16 @@
 @import "~bootstrap/scss/bootstrap";
+@import './variables.scss';
 
 .cur-pointer {
     cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
+
+.c__card {
+    .c__card__title{
+        background-color: $off-white;
+    }
 }
