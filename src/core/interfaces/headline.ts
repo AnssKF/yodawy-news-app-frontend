@@ -14,3 +14,21 @@ export interface IHeadLine {
         name: string | null
     },
 }
+
+export interface IHeadLineAPIParams {
+    category: string
+    country: string
+}
+
+export interface IHeadLineAPIResPayload {
+    results: {
+        status: string,
+        totalResults: number,
+        articles: IHeadLine[]
+    }
+}
+
+export interface IHeadlineFavReqPayload {
+    url: string,
+    publishedAt: string
+}

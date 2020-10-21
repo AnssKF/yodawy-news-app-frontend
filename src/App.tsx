@@ -10,6 +10,7 @@ import { NewsPageContainer } from './pages/NewsPage/NewsPageContainer';
 import { AuthPageContainer } from './pages/AuthPage/AuthPageContainer';
 import { FOFPageContainer } from './pages/FOFPage/FOFContainer';
 import { AuthContextProvider } from './core/services/auth/store';
+import { HeadlinesContextProvider } from './core/services/headlines/store';
 
 const ROUTES: RouteProps[] = [
   {
@@ -27,7 +28,6 @@ const ROUTES: RouteProps[] = [
     component: AuthPageContainer
   },
   {
-    path: '',
     component: FOFPageContainer
   }
 ]
@@ -35,7 +35,9 @@ const ROUTES: RouteProps[] = [
 function App() {
   return (
     <AuthContextProvider>
+      <HeadlinesContextProvider>
         <RouterModule routes={ROUTES} />
+      </HeadlinesContextProvider>
     </AuthContextProvider>
   );
 }

@@ -1,42 +1,19 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Container, Row, Col, Dropdown } from 'react-bootstrap';
-import { IHeadLine } from '../../core/interfaces/headline';
 import { HeadLineCard } from './components/HeadlineCard/HeadlineCard';
 import { LayoutComponent } from '../../core/components/Layout/LayoutComponent';
+import { useHeadlines } from '../../core/services/headlines/store';
+import { FetchHeadlines, AddHeadlinesToFav, RemoveHeadlinesRfomFav } from '../../core/services/headlines';
+import { useAuth } from '../../core/services/auth/store';
+import { IHeadLine } from '../../core/interfaces/headline';
 
 type TNewsPageContainerProps = {
 }
 
 export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () => {
 
-    const news: IHeadLine[] = [
-        {
-            "source": {
-                "id": null,
-                "name": "Youm7.com"
-            },
-            "author": null,
-            "title": "أول تعليق من الراقصة لورديانة بعد سيطرتها على السوشيال ميديا يومين.. فيديو - اليوم السابع",
-            "description": "في أول تعليق من الراقصة البرازيلية لورديانة علي سيطرة فيديو رقصها علي مواقع التواصل الاجتماعي اليومين الماضيين، وجهت الشكر لكل من دعمها، وقالت في فيديو لها.",
-            "url": "https://www.youm7.com/story/2020/10/21/أول-تعليق-من-الراقصة-لورديانة-بعد-سيطرتها-على-السوشيال-ميديا/5030418",
-            "urlToImage": "https://img.youm7.com/large/202010201058525852.jpg",
-            "publishedAt": "2020-10-21T07:10:00Z",
-            "content": null
-        },
-        {
-            "source": {
-                "id": null,
-                "name": "Youm7.com"
-            },
-            "author": null,
-            "title": "الأرصاد تتوقع اليوم أمطارا غزيرة على السواحل الشمالية ورعدية على أقصى الغرب - اليوم السابع",
-            "description": "توقعت هيئة الأرصاد الجوية أن يسود، اليوم، الأربعاء، طقس مائل للحرارة على القاهرة والرياح معتدلة، وطقس مائل للحرارة على الوجه البحرى، وأمطار خفيفة إلى متوسطة، والرياح معتدلة..",
-            "url": "https://www.youm7.com/story/2020/10/21/الأرصاد-تتوقع-اليوم-أمطارا-غزيرة-على-السواحل-الشمالية-ورعدية-على/5029627",
-            "urlToImage": "https://img.youm7.com/large/201902150148404840.jpg",
-            "publishedAt": "2020-10-21T06:00:00Z",
-            "content": "\" – – \" .\r\n80% \" – – \" ..\r\n: 31 21 28 21 24 19 37 20 37 21 39 24 ."
-        },
-    ]
+    const [authState, setAuthState] = useAuth()
+    const [news, setNews] = useHeadlines();
 
     const [category, setCategory] = useState<string>('business')
     const categories: string[] = [
@@ -55,6 +32,54 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
         'ae'
     ]
 
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                const res = await FetchHeadlines({category, country}, authState.access_token);
+                setNews(res)
+            }catch(e) {
+                console.log('NEWS PAGE E');
+                console.log(e);
+            }
+        }
+
+        fetch()
+    }, [authState.access_token, category, country, setNews])
+
+
+    const favClicked = async (type: 'add' | 'remove', headline:IHeadLine) => {
+        try {
+            if(type === 'add'){
+                await AddHeadlinesToFav(headline, authState.access_token)
+
+                const updatedData = news.map((_)=>{
+                    if(_.url === headline.url && _.publishedAt === headline.publishedAt){
+                        _.liked = true;
+                    }
+                    return _;
+                })
+                setNews(updatedData)
+                return
+            }
+
+            if(type === 'remove'){
+                await RemoveHeadlinesRfomFav(headline, authState.access_token)
+                const updatedData = news.map((_)=>{
+                    if(_.url === headline.url && _.publishedAt === headline.publishedAt){
+                        _.liked = false;
+                    }
+                    return _;
+                })
+                setNews(updatedData)
+                return
+            }
+
+        }catch(e) {
+            console.log('NEWS PAGE E')
+            console.log(e)
+        }
+    }
+
     return (
         <LayoutComponent>
             <Container className="pt-5">
@@ -68,8 +93,8 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
 
                             <Dropdown.Menu>
                                 {
-                                    categories.map( category => (
-                                        <Dropdown.Item onClick={ ($e) => setCategory(category)}>{category.charAt(0).toUpperCase() + category.slice(1)}</Dropdown.Item>
+                                    categories.map( (category, i) => (
+                                        <Dropdown.Item key={i} onClick={ ($e) => setCategory(category)}>{category.charAt(0).toUpperCase() + category.slice(1)}</Dropdown.Item>
                                     ))
                                 }
                             </Dropdown.Menu>
@@ -82,13 +107,18 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
 
                             <Dropdown.Menu>
                                 {
-                                    countries.map( country => (
-                                        <Dropdown.Item onClick={ ($e) => setCountry(country)}>{country}</Dropdown.Item>
+                                    countries.map( (country, i) => (
+                                        <Dropdown.Item key={i} onClick={ ($e) => setCountry(country)}>{country}</Dropdown.Item>
                                     ))
                                 }
                             </Dropdown.Menu>
                         </Dropdown>
 
+                        {
+                            !authState.access_token?
+                            <small>You need to login to add items to Favorit</small>
+                            : ''
+                        }
 
                     </Col>
                 </Row>
@@ -101,8 +131,8 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
                                 if (i % 2) {
 
                                     node = (
-                                        <div className="pb-3">
-                                            <HeadLineCard headline={_} />
+                                        <div className="pb-3" key={i}>
+                                            <HeadLineCard headline={_} showFav={!!authState.access_token} favClicked={favClicked}/>
                                         </div>
                                     )
                                 }
@@ -118,8 +148,8 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
                                 if (!(i % 2)) {
 
                                     node = (
-                                        <div className="pb-3">
-                                            <HeadLineCard headline={_} />
+                                        <div className="pb-3" key={i}>
+                                            <HeadLineCard headline={_} showFav={!!authState.access_token} favClicked={favClicked}/>
                                         </div>
                                     )
                                 }

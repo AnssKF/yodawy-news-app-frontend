@@ -6,10 +6,27 @@ import './HeadlineCard.scss'
 import { truncateText } from '../../../../core/functions';
 
 type THeadLineCardComponentProps = {
-    headline: IHeadLine
+    headline: IHeadLine,
+    showFav?: boolean,
+    favClicked?: (type: 'add' | 'remove', payload:IHeadLine) => void
 }
 
-export const HeadLineCard: FunctionComponent<THeadLineCardComponentProps> = ({headline}) => {
+export const HeadLineCard: FunctionComponent<THeadLineCardComponentProps> = ({headline, showFav, favClicked}) => {
+
+    const favBadgeClicked = (type: 'add' | 'remove') => {
+        if(favClicked) {
+            if(type === 'add'){
+                favClicked('add', headline)
+                return;
+            }
+
+            if(type === 'remove'){
+                favClicked('remove', headline)
+                return;
+            }
+        }
+    }
+
     return (
         <Card className="c__card headline shadow p-3 rounded-0 border-0">
 
@@ -19,6 +36,17 @@ export const HeadLineCard: FunctionComponent<THeadLineCardComponentProps> = ({he
                     style={{backgroundImage: 'url(' + headline.urlToImage + ')',}}>
                 </div>
                 <div>
+                    {
+                        !!headline?.liked && showFav?
+                            <Badge variant="success" className="cur-pointer mr-2" onClick={()=>favBadgeClicked('remove')}>
+                                Favoriet
+                            </Badge>
+                        : showFav ?
+                            <Badge variant="secondary" className="cur-pointer mr-2" onClick={()=>favBadgeClicked('add')}>
+                                Add To Favoriets
+                            </Badge>
+                        : ''
+                        }
                     {
                         !!headline.author?
                             <Badge variant="dark" className="headline__author mr-2" dangerouslySetInnerHTML={{__html: headline.author}}>
