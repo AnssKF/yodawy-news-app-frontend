@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, Fragment } from 'react'
 
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import { Link, useHistory } from "react-router-dom";
@@ -15,6 +15,10 @@ export const NavBarComponent: FunctionComponent<TNavBarComponentProps> = () => {
     const [authState, setAuthState] = useAuth()
 
     const navigate = (route: string) => routeHistory.push(route)
+    const logout = () => setAuthState({
+        access_token: '',
+        user: null
+    })
 
     return (
         <Navbar bg="dark" variant="dark">
@@ -29,9 +33,14 @@ export const NavBarComponent: FunctionComponent<TNavBarComponentProps> = () => {
                                 Login/Signup
                             </Nav.Link>
                         : 
+                        <Fragment>
                             <Navbar.Text>
                                 Signed in as: {authState.user?.name}
                             </Navbar.Text>
+                            <Nav.Link onClick={logout}>
+                                Logout
+                            </Nav.Link>
+                        </Fragment>
                     }
 
                 </Nav>

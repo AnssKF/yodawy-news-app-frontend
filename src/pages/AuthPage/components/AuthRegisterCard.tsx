@@ -103,7 +103,7 @@ export const AuthRegisterCardComponent: FunctionComponent<TAuthRegisterCardCompo
                     msg: ''
                 }
             });
-            navigate('/headlines')
+            navigate('/')
         }catch(e) {
             const errors: {[key: string]: string[]} = e.errors
 

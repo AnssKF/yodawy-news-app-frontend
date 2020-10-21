@@ -76,7 +76,7 @@ export const AuthLoginCardComponent: FunctionComponent<TAuthLoginCardComponentPr
                     msg: ''
                 }
             });
-            navigate('/headlines')
+            navigate('../../headlines')
         }catch(e){
             setLoginForm((oldState) => {
                 let newState = { ...oldState }

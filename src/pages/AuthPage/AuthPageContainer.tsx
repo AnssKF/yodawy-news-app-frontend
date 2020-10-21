@@ -11,38 +11,14 @@ import { LayoutComponent } from '../../core/components/Layout/LayoutComponent';
 type TAuthPageContainerProps = {
 }
 
-export const AuthPageContainer: FunctionComponent<TAuthPageContainerProps> = () => {
-
-    const match = useRouteMatch();
-    
-    const ROUTES: RouteProps[] = [
-        {
-            path: `${match.path}/`,
-            render: () => (<Redirect to={`${match.path}/login`} />),
-            exact: true
-        },
-        {
-            path: `${match.path}/login`,
-            component: AuthLoginCardComponent,
-            exact: true
-        },
-        {
-            path: `${match.path}/signup`,
-            component: AuthRegisterCardComponent,
-            exact: true
-        },
-        {
-            path: '',
-            component: FOFPageContainer
-        }
-    ]
+export const AuthPageContainer: FunctionComponent<TAuthPageContainerProps> = ({children}) => {
 
     return (
         <LayoutComponent>
             <div className="d-flex flex-column justify-content-center h-100 w-100">
                 <Row className="justify-content-center">
                     <Col xs={10} md={8} lg={6} xl={3}> 
-                        <RouterModule routes={ROUTES} />
+                        {children}
                     </Col>
                 </Row>
             </div>

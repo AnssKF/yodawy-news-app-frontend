@@ -11,6 +11,8 @@ import { AuthPageContainer } from './pages/AuthPage/AuthPageContainer';
 import { FOFPageContainer } from './pages/FOFPage/FOFContainer';
 import { AuthContextProvider } from './core/services/auth/store';
 import { HeadlinesContextProvider } from './core/services/headlines/store';
+import { AuthLoginCardComponent } from './pages/AuthPage/components/AuthLoginCard';
+import { AuthRegisterCardComponent } from './pages/AuthPage/components/AuthRegisterCard';
 
 const ROUTES: RouteProps[] = [
   {
@@ -20,14 +22,22 @@ const ROUTES: RouteProps[] = [
   },
   {
     path: '/headlines',
-    component: NewsPageContainer,
-    exact: true
+    component: NewsPageContainer
   },
   {
-    path: '/auth',
-    component: AuthPageContainer
+    path: '/auth/login',
+    render: () => (<AuthPageContainer> 
+                    <AuthLoginCardComponent />
+                  </AuthPageContainer>),
   },
   {
+    path: '/auth/signup',
+    render: () => (<AuthPageContainer> 
+                    <AuthRegisterCardComponent />
+                  </AuthPageContainer>),
+  },
+  {
+    path: '*',
     component: FOFPageContainer
   }
 ]
