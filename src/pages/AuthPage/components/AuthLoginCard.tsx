@@ -78,8 +78,11 @@ export const AuthLoginCardComponent: FunctionComponent<TAuthLoginCardComponentPr
             });
             navigate('/headlines')
         }catch(e){
-            console.log('LOGIN FORM E');
-            console.log(e);
+            setLoginForm((oldState) => {
+                let newState = { ...oldState }
+                newState['email'].msg = e.message
+                return newState
+            })
         }
     }
 

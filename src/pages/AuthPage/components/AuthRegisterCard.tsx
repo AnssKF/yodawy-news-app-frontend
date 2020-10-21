@@ -105,8 +105,18 @@ export const AuthRegisterCardComponent: FunctionComponent<TAuthRegisterCardCompo
             });
             navigate('/headlines')
         }catch(e) {
-            console.log('LOGIN FORM E');
-            console.log(e);
+            const errors: {[key: string]: string[]} = e.errors
+
+            setSignupForm((oldState) => {
+                let newState = { ...oldState };
+
+                newState.name.msg = errors?.name?.length ? errors?.name[0] : ''
+                newState.email.msg = errors?.email?.length ? errors?.email[0] : ''
+                newState.password.msg = errors?.password?.length ? errors?.password[0] : ''
+                newState.password_confirmation.msg = errors?.password_confirmation?.length ? errors?.password_confirmation[0] : ''
+
+                return newState
+            })
         }
     }
 
