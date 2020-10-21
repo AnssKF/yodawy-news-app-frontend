@@ -38,8 +38,7 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
                 const res = await FetchHeadlines({category, country}, authState.access_token);
                 setNews(res)
             }catch(e) {
-                console.log('NEWS PAGE E');
-                console.log(e);
+                setNews([])
             }
         }
 
@@ -75,8 +74,6 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
             }
 
         }catch(e) {
-            console.log('NEWS PAGE E')
-            console.log(e)
         }
     }
 
@@ -122,42 +119,51 @@ export const NewsPageContainer: FunctionComponent<TNewsPageContainerProps> = () 
 
                     </Col>
                 </Row>
-                <Row>
+                {
+                    !news.length?
+                        <Row>
+                            <Col className="text-center">
+                                There is data available right now.
+                            </Col>
+                        </Row>
+                    :
+                    <Row>
 
-                    <Col xs={10} md={6}>
-                        {
-                            news.map((_, i) => {
-                                let node;
-                                if (i % 2) {
+                        <Col xs={10} md={6}>
+                            {
+                                news.map((_, i) => {
+                                    let node;
+                                    if (i % 2) {
 
-                                    node = (
-                                        <div className="pb-3" key={i}>
-                                            <HeadLineCard headline={_} showFav={!!authState.access_token} favClicked={favClicked}/>
-                                        </div>
-                                    )
-                                }
-                                return node;
-                            })
-                        }
-                    </Col>
+                                        node = (
+                                            <div className="pb-3" key={i}>
+                                                <HeadLineCard headline={_} showFav={!!authState.access_token} favClicked={favClicked}/>
+                                            </div>
+                                        )
+                                    }
+                                    return node;
+                                })
+                            }
+                        </Col>
 
-                    <Col xs={10} md={6}>
-                        {
-                            news.map((_, i) => {
-                                let node;
-                                if (!(i % 2)) {
+                        <Col xs={10} md={6}>
+                            {
+                                news.map((_, i) => {
+                                    let node;
+                                    if (!(i % 2)) {
 
-                                    node = (
-                                        <div className="pb-3" key={i}>
-                                            <HeadLineCard headline={_} showFav={!!authState.access_token} favClicked={favClicked}/>
-                                        </div>
-                                    )
-                                }
-                                return node;
-                            })
-                        }
-                    </Col>
-                </Row>
+                                        node = (
+                                            <div className="pb-3" key={i}>
+                                                <HeadLineCard headline={_} showFav={!!authState.access_token} favClicked={favClicked}/>
+                                            </div>
+                                        )
+                                    }
+                                    return node;
+                                })
+                            }
+                        </Col>
+                    </Row>
+                }
             </Container>
         </LayoutComponent>
     )
